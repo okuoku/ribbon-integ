@@ -11,7 +11,9 @@ jobs:
         os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
-            coverage: ["on", "off"]
+            coverage: on
+          - os: ubuntu-latest
+            coverage: off
     runs-on: ${{ matrix.os }}
     timeout-minutes: 90
     steps:
@@ -35,7 +37,7 @@ jobs:
           sudo ln -s ${{ github.workspace}}/yunibase /opt/yunibase
       - name: Configure
         run: cmake ${{ github.workspace }}/src
-      - if: matrix.coverage == 'on'
+      - if: matrix.coverage
         name: "Configure: Enable Coverage"
         run: cmake -DCOVERAGE=ON .
       - name: Build
@@ -44,7 +46,7 @@ jobs:
         run: ctest -R C- . || exit 0
       - name: Test (CXX, Ignore error)
         run: ctest -R CXX- . || exit 0
-      - if: matrix.coverage == 'on'
+      - if: matrix.coverage
         name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 

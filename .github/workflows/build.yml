@@ -36,7 +36,7 @@ jobs:
       - name: Configure
         run: cmake ${{ github.workspace }}/src
       - if: ${{ matrix.coverage }}
-        name: Configure: Enable Coverage
+        name: "Configure: Enable Coverage"
         run: cmake -DCOVERAGE=ON .
       - name: Build
         run: cmake --build .

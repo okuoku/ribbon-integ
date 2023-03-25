@@ -31,9 +31,9 @@ jobs:
           sudo mkdir -p /opt
           sudo ln -s ${{ github.workspace}}/yunibase /opt/yunibase
       - name: Configure
-        run: cmake -G Ninja ${{ github.workspace }}/src
+        run: cmake ${{ github.workspace }}/src
       - name: Build
-        run: ninja
+        run: cmake --build .
       - name: Test (Ignore error)
         run: ctest --verbose . || exit 0
 

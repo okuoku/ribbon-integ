@@ -1,0 +1,9 @@
+[submodule "yuniribbit-proto"]
+	path = yuniribbit-proto
+	url = https://github.com/okuoku/yuniribbit-proto
+[submodule "yuni"]
+	path = yuni
+	url = https://github.com/okuoku/yuni
+[submodule "ribbon"]
+	path = ribbon
+	url = https://github.com/okuoku/ribbon

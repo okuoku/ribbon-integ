@@ -21,6 +21,7 @@ jobs:
       - name: Checkout Yunibase
         uses: actions/checkout@v3
         with:
+          repository: okuoku/prebuilt-yunibase-proto
           path: yunibase
           fetch-depth: 1
           ref: linux-amd64

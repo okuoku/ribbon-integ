@@ -16,18 +16,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: src
-          fetch-depth: 0
+          fetch-depth: 1
           submodules: true
-      - name: Download Yunibase
-        run: curl -L --output yunibase.tar.gz https://api.github.com/repos/okuoku/prebuilt-yunibase-proto/tarball/linux-amd64
-      - name: Extract Yunibase
-        run: |
-          tar zxf yunibase.tar.gz
-          mv mv okuoku-prebuilt-yunibase-proto-* yunibase
+      - name: Checkout Yunibase
+        uses: actions/checkout@v3
+        with:
+          path: yunibase
+          fetch-depth: 1
+          ref: linux-amd64
+          submodules: false
       - name: Install Yunibase
         run: |
           sudo mkdir -p /opt
-          sudo ln -s yunibase /opt/yunibase
+          sudo ln -s ${{ github.workspace}}/yunibase /opt/yunibase
       - name: Configure
         run: cmake -G Ninja ${{ github.workspace }}/src
       - name: Build

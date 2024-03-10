@@ -7,3 +7,6 @@
 [submodule "ribbon"]
 	path = ribbon
 	url = https://github.com/okuoku/ribbon
+[submodule "_snapshot"]
+	path = _snapshot
+	url = https://github.com/okuoku/ribbon-snapshot

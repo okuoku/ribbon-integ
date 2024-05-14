@@ -6,16 +6,17 @@ on:
 
 jobs:
   build:
-    matrix: 
-      include:
-        - os: windows-2022
-          host: native
-        - os: windows-2022
-          host: cygwin-ltsc2022
-        - os: macos-latest
-          host: native
-        - os: ubuntu-latest
-          host: native
+    strategy:
+      matrix: 
+        include:
+          - os: windows-2022
+            host: native
+          - os: windows-2022
+            host: cygwin-ltsc2022
+          - os: macos-latest
+            host: native
+          - os: ubuntu-latest
+            host: native
     runs-on: ${{ matrix.os }}
 
     steps:

@@ -1,0 +1,38 @@
+name: CI (Windows)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    matrix: 
+      include:
+        - os: windows-2022
+          host: native
+        - os: windows-2022
+          host: cygwin-ltsc2022
+        - os: macos-latest
+          host: native
+        - os: ubuntu-latest
+          host: native
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: "Prepare"
+        run: |
+          cmake -DHOST=${{ matrix.host }} -DPHASE=prepare -P integ/integbuild.cmake
+
+      - name: "Build"
+        run: |
+          cmake -DHOST=${{ matrix.host }} -DPHASE=build -P integ/integbuild.cmake
+
+      - name: "Test"
+        run: |
+          cmake -DHOST=${{ matrix.host }} -DPHASE=test -P integ/integbuild.cmake
+

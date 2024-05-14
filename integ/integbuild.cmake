@@ -68,7 +68,7 @@ elseif("${PHASE}" STREQUAL build)
     if("${HOST}" STREQUAL native)
         message(STATUS "Configure... builddir: ${builddir}")
         execute_process(COMMAND
-            cmake -S ${root} -B ${builddir}
+            cmake -G Ninja -S ${root} -B ${builddir}
             RESULT_VARIABLE rr
             )
         if(rr)

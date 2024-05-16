@@ -11,12 +11,16 @@ jobs:
         include:
           - os: windows-2022
             host: native
+            builder: msbuild
           - os: windows-2022
             host: cygwin-ltsc2022
+            builder: ninja
           - os: macos-latest
             host: native
+            builder: make
           - os: ubuntu-latest
             host: native
+            builder: make
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -27,13 +31,13 @@ jobs:
 
       - name: "Prepare"
         run: |
-          cmake -DHOST=${{ matrix.host }} -DPHASE=prepare -P integ/integbuild.cmake
+          cmake -DBUILDER=${{ matrix.builder }} -DHOST=${{ matrix.host }} -DPHASE=prepare -P integ/integbuild.cmake
 
       - name: "Build"
         run: |
-          cmake -DHOST=${{ matrix.host }} -DPHASE=build -P integ/integbuild.cmake
+          cmake -DBUILDER=${{ matrix.builder }} -DHOST=${{ matrix.host }} -DPHASE=build -P integ/integbuild.cmake
 
       - name: "Test"
         run: |
-          cmake -DHOST=${{ matrix.host }} -DPHASE=test -P integ/integbuild.cmake
+          cmake -DBUILDER=${{ matrix.builder }} -DHOST=${{ matrix.host }} -DPHASE=test -P integ/integbuild.cmake
 

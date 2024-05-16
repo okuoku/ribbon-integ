@@ -3,11 +3,16 @@
 #   HOST: cygwin-ltsc2022 | cygwin-win10desktop | native
 #   NAME: name of build (original HOST)
 #   PHASE: prepare | build | test
+#   BUILDER: msbuild | ninja | make
 #
 
 cmake_path(ABSOLUTE_PATH CMAKE_CURRENT_LIST_DIR OUTPUT_VARIABLE root0)
 cmake_path(APPEND root0 ..)
 cmake_path(NATIVE_PATH root0 NORMALIZE root)
+
+if(NOT BUILDER)
+    set(BUILDER ninja)
+endif()
 
 if(NOT NAME)
     set(NAME ${HOST})
@@ -31,6 +36,22 @@ endif()
 
 if("${docker_imagetype}" STREQUAL cygwin)
 
+endif()
+
+if("${BUILDER}" STREQUAL ninja)
+    set(cmakegen -G Ninja)
+    set(cmakebld)
+    set(ctestcfg)
+elseif("${BUILDER}" STREQUAL make)
+    set(cmakegen)
+    set(cmakebld -- -j8)
+    set(ctestcfg)
+elseif("${BUILDER}" STREQUAL msbuild)
+    set(cmakegen)
+    set(cmakebld --config Debug)
+    set(ctestcfg -C Debug)
+else()
+    message(FATAL_ERROR "Unknown builder")
 endif()
 
 function(nest_native)
@@ -68,7 +89,7 @@ elseif("${PHASE}" STREQUAL build)
     if("${HOST}" STREQUAL native)
         message(STATUS "Configure... builddir: ${builddir}")
         execute_process(COMMAND
-            cmake -G Ninja -S ${root} -B ${builddir}
+            cmake ${cmakegen} -S ${root} -B ${builddir}
             RESULT_VARIABLE rr
             )
         if(rr)
@@ -76,7 +97,7 @@ elseif("${PHASE}" STREQUAL build)
         endif()
         message(STATUS "Build... builddir: ${builddir}")
         execute_process(COMMAND
-            cmake --build ${builddir}
+            cmake --build ${builddir} ${cmakebld}
             RESULT_VARIABLE rr
             )
         if(rr)
@@ -89,7 +110,7 @@ elseif("${PHASE}" STREQUAL test)
     if("${HOST}" STREQUAL native)
         message(STATUS "Test... builddir: ${builddir}")
         execute_process(COMMAND
-            ctest -j10 .
+            ctest ${ctestcfg} -j10 .
             WORKING_DIRECTORY ${builddir}
             RESULT_VARIABLE rr
             )

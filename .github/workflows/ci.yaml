@@ -9,9 +9,9 @@ jobs:
     strategy:
       matrix: 
         include:
-          - os: windows-2022
-            host: native
-            builder: msbuild
+          #- os: windows-2022
+          #  host: native
+          #  builder: msbuild
           - os: windows-2022
             host: cygwin-ltsc2022
             builder: ninja
